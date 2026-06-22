@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenClaw Setup & Management | Remote Assistant</title>
+  <meta name="description" content="Professional OpenClaw setup and remote management starting at $300. Available to businesses anywhere in the United States. Get your automation running fast." />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0A0F1E;
+      --navy-card: #1E2A3A;
+      --navy-border: #263347;
+      --cyan: #00D4FF;
+      --cyan-dim: rgba(0, 212, 255, 0.12);
+      --cyan-glow: rgba(0, 212, 255, 0.25);
+      --white: #FFFFFF;
+      --muted: #8899AA;
+      --text: #D0DCE8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      background-color: var(--navy);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: var(--white);
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── NAV ── */
+    .site-nav {
+      background: rgba(10, 15, 30, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--navy-border);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-nav .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .site-nav .brand span { color: var(--cyan); }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 5rem 0 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(0,212,255,0.10) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,212,255,0.3);
+      border-radius: 4px;
+      padding: 0.3rem 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero-headline {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+    }
+    .hero-headline .accent { color: var(--cyan); }
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 580px;
+      margin-bottom: 2.25rem;
+    }
+
+    /* Terminal block */
+    .terminal {
+      background: #0D1526;
+      border: 1px solid var(--navy-border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin-bottom: 2.25rem;
+      max-width: 520px;
+    }
+    .terminal .t-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+    .t-dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+    }
+    .t-dot.r { background: #FF5F57; }
+    .t-dot.y { background: #FEBC2E; }
+    .t-dot.g { background: #28C840; }
+    .terminal .t-line { color: var(--muted); line-height: 1.8; }
+    .terminal .t-line .cmd { color: var(--cyan); }
+    .terminal .t-line .val { color: #7FFFB2; }
+    .terminal .t-line .comment { color: #4A5568; }
+    .terminal .cursor {
+      display: inline-block;
+      width: 8px; height: 1em;
+      background: var(--cyan);
+      vertical-align: text-bottom;
+      animation: blink 1.1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* CTA buttons */
+    .btn-cta {
+      background: var(--cyan);
+      color: var(--navy);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn-cta:hover { opacity: 0.88; transform: translateY(-1px); color: var(--navy); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--navy-border);
+      border-radius: 6px;
+      text-decoration: none;
+      display: inline-block;
+      transition: border-color 0.15s;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--white); }
+
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.5rem;
+    }
+    .trust-item {
+      font-size: 0.82rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .trust-item .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--navy-border);
+      margin: 0;
+    }
+
+    /* ── WHAT YOU GET ── */
+    .section { padding: 5rem 0; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 1rem;
+    }
+    .section-intro {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+    }
+
+    .feature-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 10px;
+      padding: 1.75rem;
+      height: 100%;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: rgba(0,212,255,0.4); }
+    .feature-icon {
+      width: 40px; height: 40px;
+      background: var(--cyan-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    .feature-card h5 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── PROCESS ── */
+    .process-section { background: #0D1526; }
+    .process-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .process-step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+    .step-content h5 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .step-content p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── PRICING ── */
+    .pricing-card {
+      background: var(--navy-card);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      padding: 2.5rem;
+    }
+    .pricing-card.featured {
+      border-color: var(--cyan);
+      box-shadow: 0 0 40px var(--cyan-glow);
+    }
+    .price-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+    .price-amount .currency {
+      font-size: 1.5rem;
+      vertical-align: super;
+      color: var(--cyan);
+    }
+    .price-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .price-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+    }
+    .price-list li {
+      font-size: 0.92rem;
+      color: var(--text);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--navy-border);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .price-list li:last-child { border-bottom: none; }
+    .price-list li::before {
+      content: '✓';
+      color: var(--cyan);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .badge-featured {
+      display: inline-block;
+      background: var(--cyan);
+      color: var(--navy);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 4px;
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── AVAILABILITY ── */
+    .avail-section {
+      background: linear-gradient(135deg, rgba(0,212,255,0.06) 0%, transparent 60%);
+      border-top: 1px solid var(--navy-border);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .avail-stat {
+      text-align: center;
+      padding: 1rem;
+    }
+    .avail-stat .num {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 1;
+    }
+    .avail-stat .lbl {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    /* ── ABOUT OPENCLAW ── */
+    .about-section { background: #0D1526; }
+    .about-card {
+      background: var(--navy);
+      border: 1px solid var(--navy-border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .about-card h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .about-card p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── FOOTER CTA ── */
+    .footer-cta {
+      padding: 5rem 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .footer-cta::before {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(0,212,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--navy-border);
+      padding: 1.75rem 0;
+      font-size: 0.83rem;
+      color: var(--muted);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero { padding: 3.5rem 0 3rem; }
+      .hero-sub { font-size: 1rem; }
+      .terminal { font-size: 0.78rem; }
+      .section { padding: 3.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <div class="container d-flex align-items-center justify-content-between">
+      <a href="/" class="brand">CHS<span>Assistant</span></a>
+      <a href="#pricing" class="btn-cta" style="padding: 0.55rem 1.3rem; font-size: 0.9rem;">Get Started — $300</a>
+    </div>
+  </nav>
+
+  <!-- HERO / CTA -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <div class="eyebrow">Remote Setup · Any State · Fast Turnaround</div>
+          <h1 class="hero-headline">
+            Get OpenClaw <span class="accent">Running</span><br>
+            Without the Headache
+          </h1>
+          <p class="hero-sub">
+            Professional OpenClaw installation, configuration, and ongoing management — fully remote, available to businesses anywhere in the United States. Starting at <strong style="color:var(--white);">$300.</strong>
+          </p>
+          <div class="d-flex flex-wrap gap-3">
+            <a href="tel:8542402141" class="btn-cta">Book Your Setup Now</a>
+            <a href="#what-you-get" class="btn-ghost">See What's Included</a>
+          </div>
+          <div class="trust-strip">
+            <span class="trust-item"><span class="dot"></span>Available Nationwide</span>
+            <span class="trust-item"><span class="dot"></span>100% Remote</span>
+            <span class="trust-item"><span class="dot"></span>Setup + Ongoing Support</span>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="terminal">
+            <div class="t-bar">
+              <span class="t-dot r"></span>
+              <span class="t-dot y"></span>
+              <span class="t-dot g"></span>
+            </div>
+            <div class="t-line"><span class="comment"># OpenClaw — your automation, configured right</span></div>
+            <div class="t-line"><span class="cmd">$</span> openclaw init <span class="val">--env production</span></div>
+            <div class="t-line"><span class="cmd">$</span> openclaw configure <span class="val">--profile your-business</span></div>
+            <div class="t-line"><span class="cmd">$</span> openclaw start</div>
+            <div class="t-line" style="color:#7FFFB2;">✔ Automation running. All systems go.</div>
+            <div class="t-line"><span class="cmd">$</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider" />
+
+  <!-- AVAILABILITY STATS -->
+  <section class="avail-section py-4">
+    <div class="container">
+      <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+          <div class="avail-stat">
+            <div class="num">50</div>
+            <div class="lbl">States Served</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="avail-stat">
+            <div class="num">100%</div>
+            <div class="lbl">Remote Delivery</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="avail-stat">
+            <div class="num">$300</div>
+            <div class="lbl">Starting Price</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="avail-stat">
+            <div class="num">Fast</div>
+            <div class="lbl">Turnaround</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section class="section" id="what-you-get">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-6">
+          <div class="section-label">Services</div>
+          <h2 class="section-title">Everything You Need to Launch</h2>
+          <p class="section-intro">
+            You focus on running your business. I handle the technical side — from first install to ongoing reliability.
+          </p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">⚙️</div>
+            <h5>Full Installation & Config</h5>
+            <p>End-to-end OpenClaw setup tailored to your environment — server, credentials, integrations, and workflow rules configured correctly from the start.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">🌐</div>
+            <h5>Remote Access — Any State</h5>
+            <p>Doesn't matter if you're in California, Texas, or anywhere in between. All work is done remotely with no travel fees or scheduling constraints.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">🔁</div>
+            <h5>Automation Workflow Setup</h5>
+            <p>Define your automation rules, triggers, and actions. I map your business process to OpenClaw's logic so it runs the way you actually need it to.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h5>Troubleshooting & Fixes</h5>
+            <p>If something breaks or misfires, I track it down and fix it — quickly. No waiting days for a support ticket to get answered.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">📡</div>
+            <h5>Ongoing Management</h5>
+            <p>Keep your automation healthy long-term. Available for monitoring, updates, and adjustments as your workflow needs evolve.</p>
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h5>Documentation Handoff</h5>
+            <p>You get clear notes on what was built and how it works so your team isn't left in the dark if anything needs a look later.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section process-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-5 mb-5 mb-lg-0">
+          <div class="section-label">How It Works</div>
+          <h2 class="section-title">Simple Process,<br>Fast Results</h2>
+          <p class="section-intro">
+            From first contact to a running system — no unnecessary back-and-forth.
+          </p>
+          <a href="tel:8542402141" class="btn-cta mt-4 d-inline-block">Start Now</a>
+        </div>
+        <div class="col-lg-6 offset-lg-1">
+          <div class="process-step">
+            <span class="step-num">01</span>
+            <div class="step-content">
+              <h5>You Book & We Talk</h5>
+              <p>Submit your project details. I'll reach out within 24 hours to discuss your environment, goals, and any specific requirements.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">02</span>
+            <div class="step-content">
+              <h5>Remote Access & Setup</h5>
+              <p>You grant temporary remote access. I handle the full OpenClaw installation and configuration — you don't need to be technical.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">03</span>
+            <div class="step-content">
+              <h5>Testing & Handoff</h5>
+              <p>Everything gets tested before I hand over. You see it working in your environment before we close out setup.</p>
+            </div>
+          </div>
+          <div class="process-step">
+            <span class="step-num">04</span>
+            <div class="step-content">
+              <h5>Ongoing Support Available</h5>
+              <p>Need it managed long-term? Ask about a support retainer. I stay available for monitoring, changes, and fixes.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <div class="row mb-5 text-center">
+        <div class="col">
+          <div class="section-label">Pricing</div>
+          <h2 class="section-title">Straightforward Rates</h2>
+          <p class="section-intro mx-auto">No surprise fees. No overcomplicated tiers. Pick what fits your situation.</p>
+        </div>
+      </div>
+      <div class="row g-4 justify-content-center">
+
+        <div class="col-md-6 col-lg-4">
+          <div class="pricing-card h-100">
+            <h5 class="mb-3">Setup Only</h5>
+            <div class="price-amount"><span class="currency">$</span>300</div>
+            <div class="price-label">One-time payment</div>
+            <ul class="price-list">
+              <li>Full OpenClaw installation</li>
+              <li>Environment configuration</li>
+              <li>Basic workflow setup</li>
+              <li>Testing & verification</li>
+              <li>Documentation handoff</li>
+            </ul>
+            <a href="mailto:contact@chsassistant.com?subject=OpenClaw Setup Request" class="btn-ghost w-100 text-center">Get Started</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="pricing-card featured h-100">
+            <div class="badge-featured">Most Popular</div>
+            <h5 class="mb-3">Setup + Support</h5>
+            <div class="price-amount"><span class="currency">$</span>300<span style="font-size:1.1rem; color:var(--muted);">+</span></div>
+            <div class="price-label">Setup fee + monthly support</div>
+            <ul class="price-list">
+              <li>Everything in Setup Only</li>
+              <li>Advanced workflow configuration</li>
+              <li>Ongoing monitoring</li>
+              <li>Bug fixes & adjustments</li>
+              <li>Priority response time</li>
+              <li>Monthly check-in & updates</li>
+            </ul>
+            <a href="tel:8542402141" class="btn-cta w-100 text-center">Book This Package</a>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+          <div class="pricing-card h-100">
+            <h5 class="mb-3">Custom / Enterprise</h5>
+            <div class="price-amount" style="font-size:2rem;">Let's Talk</div>
+            <div class="price-label">Quote on request</div>
+            <ul class="price-list">
+              <li>Multi-environment setups</li>
+              <li>Custom integration work</li>
+              <li>Team onboarding</li>
+              <li>Complex workflow logic</li>
+              <li>Dedicated availability</li>
+              <li>SLA options available</li>
+            </ul>
+            <a href="mailto:contact@chsassistant.com?subject=OpenClaw Custom Project" class="btn-ghost w-100 text-center">Request a Quote</a>
+          </div>
+        </div>
+
+      </div>
+      <p class="text-center mt-4" style="font-size:0.85rem; color:var(--muted);">
+        All services delivered 100% remotely · Available to businesses in all 50 states · Payment via invoice
+      </p>
+    </div>
+  </section>
+
+  <!-- ABOUT OPENCLAW -->
+  <section class="section about-section">
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-lg-7">
+          <div class="section-label">About the Tool</div>
+          <h2 class="section-title">Why Businesses Choose OpenClaw</h2>
+          <p class="section-intro">
+            OpenClaw is an open-source automation platform built for businesses that need reliable, repeatable processes without the overhead of enterprise software.
+          </p>
+        </div>
+      </div>
+      <div class="row g-4 mb-5">
+        <div class="col-md-6">
+          <p style="color:var(--text); font-size:0.97rem; line-height:1.8;">
+            At its core, OpenClaw lets you define the work your business does repeatedly — scheduling, notifications, data routing, API calls, file operations — and automates it so your team doesn't have to. It's built on proven open-source infrastructure, which means no vendor lock-in, no per-seat licensing surprises, and full control over your own data and processes.
+          </p>
+          <p style="color:var(--muted); font-size:0.95rem; line-height:1.8;">
+            For small and mid-size businesses especially, OpenClaw fills the gap between "doing it manually" and "paying for an expensive SaaS." Once configured correctly, it runs quietly in the background — handling the repetitive operational work that used to require staff time or costly integrations.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <p style="color:var(--muted); font-size:0.95rem; line-height:1.8;">
+            The challenge most businesses run into is setup. OpenClaw is powerful, but it requires technical configuration to match your specific environment and workflow needs. A misconfigured rule can mean missed triggers, duplicate actions, or broken processes — exactly the problems automation is supposed to solve.
+          </p>
+          <p style="color:var(--muted); font-size:0.95rem; line-height:1.8;">
+            That's where professional setup pays for itself. Getting it right from the start means your automation runs reliably from day one, and you don't spend weeks troubleshooting edge cases that a properly configured system would never hit.
+          </p>
+        </div>
+      </div>
+      <div class="row g-3">
+        <div class="col-sm-6 col-lg-3">
+          <div class="about-card">
+            <h5>Open Source</h5>
+            <p>No licensing fees. Full transparency into how the tool works and how your data is handled.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="about-card">
+            <h5>Flexible Triggers</h5>
+            <p>Schedule-based, event-based, or webhook-triggered — automation fires when it's supposed to.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="about-card">
+            <h5>Scales with You</h5>
+            <p>Start simple and add complexity as your needs grow without rebuilding from scratch.</p>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="about-card">
+            <h5>Self-Hosted Control</h5>
+            <p>Runs on your infrastructure. You own the data, the config, and the uptime.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <section class="footer-cta">
+    <div class="container">
+      <div class="eyebrow mx-auto d-inline-block mb-4">Ready When You Are</div>
+      <h2 class="section-title mb-3" style="font-size: clamp(1.8rem, 4vw, 2.8rem);">
+        Let's Get Your Automation Running
+      </h2>
+      <p style="color:var(--muted); max-width:480px; margin:0 auto 2rem; font-size:1.05rem;">
+        Available to businesses anywhere in the United States. Remote setup, fast turnaround, starting at $300.
+      </p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="tel:8542402141" class="btn-cta">Call to Book</a>
+        <a href="#pricing" class="btn-ghost">Review Pricing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <span>© 2025 · Nationwide · <a href="/" style="color:var(--cyan); text-decoration:none;">chsassistant.com</a></span>
+      <span>OpenClaw setup & management available nationwide · All work delivered remotely</span>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
